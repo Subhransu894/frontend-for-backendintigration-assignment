@@ -18,7 +18,10 @@ const EventDetails = ()=>{
                         <h5 style={{fontWeight:"bold"}}>{eve.title}</h5>
                         <p>Hosted by:<strong>{eve.hostedby}</strong></p>
                         <div className="d-flex justify-content-center justify-content-md-start">
-                            <img src={eve.thumbnail} alt={eve.title} className="img-fluid rounded mb-3 " style={{ width: "70%", maxHeight: "400px", objectFit: "cover" }} />
+                            <img src={eve.thumbnail} alt={eve.title} 
+                            className="img-fluid rounded mb-3 " 
+                            style={{ width: "70%", maxHeight: "400px", objectFit: "cover" }} 
+                            />
                         </div>
                         
                         <h5 style={{fontWeight:"bold"}}>Details:</h5>
