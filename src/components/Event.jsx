@@ -1,58 +1,48 @@
 import useFetch from "../useFetch";
 import { useState } from "react";
 import {Link} from "react-router-dom"
+import Navbar from "./Navbar";
 const Event = () =>{
     const {data,error,loading}=useFetch("https://backend-intigration-assignment.vercel.app/events")
     const[events,setEvents]=useState([]);
-    const[searchItem,setSearchItem]=useState("")
+    
     const[selectType,setSelectType]=useState("Select Event Type")
-
-    const searchEvent = events.filter((eve)=>eve.title.toLowerCase().includes(searchItem.toLowerCase()));
-
-    const filterEventType = events.filter((eve)=> {
-        if(selectType === "Select Event Type" || selectType === "Both"){
-            return true;
-        }
-        return eve.type === selectType;
-    })
-    // console.log(data);
-
+    const[searchItem,setSearchItem]=useState("")
+    
     if(data && events.length === 0){
         setEvents(data)
     }
+
+     if (loading) return <p className="text-center mt-5">Loading event details...</p>;
+     if (error) return <p className="text-center mt-5">Error loading event: {error.message}</p>;
+     if (!events) return <p className="text-center mt-5">No event found.</p>;
+
+    const filterByType =
+    selectType === "Select Event Type"
+      ? events
+      : selectType === "Both"
+      ? events
+      : events.filter((eve) => eve.type === selectType);
+
+      const filteredEvents = filterByType.filter((eve) =>{
+           const titleMatch= eve.title.toLowerCase().includes(searchItem.toLowerCase())
+           let tagMatch =false
+           if(Array.isArray(eve.tags)){
+                const foundTag = eve.tags.find((tag)=>
+                    tag.toLowerCase().includes(searchItem.toLowerCase())
+                );
+               if(foundTag){
+                tagMatch=true;
+               } 
+           } 
+           return titleMatch || tagMatch
+        });
+    // console.log(data);
+
     return(
-        <>
-            <section>
-                <nav className="navbar bg-body-tertiary px-4">
-                    <div className="container-fluid">
-                        <span className="navbar-brand" style={{fontFamily:"cursive",color:"red",fontSize: "1.8rem"}}>Meetup</span>
-                        <form className="d-flex align-items-center position-relative" role="search">
-                             <i
-                            className="bi bi-search position-absolute"
-                            style={{
-                            left: '10px',
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                            color: '#6c757d',
-                            pointerEvents: "none"
-                            }}
-                            ></i>
-                            <input className="form-control me-2" 
-                            type="search" 
-                            placeholder="Search by title"
-                            aria-label="Search"
-                            value={searchItem}
-                            onChange={(e)=>setSearchItem(e.target.value)}
-                            style={{
-                                paddingLeft:"35px",
-                            }}/>
-                        </form>     
-                    </div>
-                </nav>
-                <hr />  
-            </section>
-            
-            <section className="px-4">
+        <>  
+            <section className="conatiner-fluid px-4 px-md-5">
+                <Navbar searchItem={searchItem} setSearchItem={setSearchItem} />
                 <div className="d-flex justify-content-between align-items-center">
                     <h2>MeetUp Events</h2>
                     <select name="" id="" 
@@ -67,14 +57,16 @@ const Event = () =>{
                     </select>
                 </div>
                 <div className="row mt-3">
-                    {filterEventType.length > 0 ? (filterEventType.map((event)=>(
+                    {filteredEvents.length > 0 ? (filteredEvents.map((event)=>(
                         <div className="col-md-4 mb-4" key={event._id}>
                             <Link to={`/events/${event._id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                            <div className="card position-relative">
+                            <div className="card position-relative  mx-auto" style={{ maxWidth: "500px" }}>
                                 <span className="btn btn-sm btn-light text-black badge position-absolute top-0 start-0 m-2">
                                     {event.type}
                                 </span>
-                                <img src={event.thumbnail} alt={event.title} className="card-img-top"/>
+                                <div className="text-center">
+                                    <img src={event.thumbnail} alt={event.title} className="card-img-top img-fluid rounded"/>
+                                </div>    
                             </div>
                             <div className="card-body">
                                 <p className="card-title">
