@@ -1,5 +1,6 @@
 import useFetch from "../useFetch";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 const Navbar=({searchItem,setSearchItem})=>{
     const {data,error,loading}=useFetch("https://backend-intigration-assignment.vercel.app/events")
     const[events,setEvents]=useState([]);
@@ -13,7 +14,11 @@ const Navbar=({searchItem,setSearchItem})=>{
             <section>
                 <nav className="navbar navbar-expand-lg ">
                     <div className="container-fluid">
-                        <span className="navbar-brand" style={{fontFamily:"cursive",color:"red",fontSize: "1.8rem"}}>Meetup</span>
+                        <Link 
+                        to="/"
+                        className="navbar-brand" 
+                        style={{fontFamily:"cursive",color:"red",fontSize: "1.8rem", textDecoration: "none" }}
+                        >Meetup</Link>
                         <form className="d-flex align-items-center position-relative" role="search">
                              <i
                             className="bi bi-search position-absolute"

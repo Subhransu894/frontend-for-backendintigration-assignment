@@ -11,18 +11,21 @@ const EventDetails = ()=>{
     if (!eve) return <p className="text-center mt-5">No event found.</p>;
     return(
         <>
-            <section className="conatiner-fluid px-4 px-md-5">  
+            <section className="conatiner-fluid px-4 px-md-5 mb-3">  
                 <Navbar/> 
                 <div className="row">
-                    <div className="col-md-8 my-3">
+                    <div className="col-md-8 my-3 ">
                         <h5 style={{fontWeight:"bold"}}>{eve.title}</h5>
                         <p>Hosted by:<strong>{eve.hostedby}</strong></p>
                         <div className="d-flex justify-content-center justify-content-md-start">
-                            <img src={eve.thumbnail} alt={eve.title} className="img-fluid rounded mb-3 " />
+                            <img src={eve.thumbnail} alt={eve.title} className="img-fluid rounded mb-3 " style={{ width: "70%", maxHeight: "400px", objectFit: "cover" }} />
                         </div>
                         
                         <h5 style={{fontWeight:"bold"}}>Details:</h5>
-                        <p>{eve.description  || "No Description is Available"}</p>
+                        <div style={{maxWidth: "70%", wordBreak: "break-word", overflowWrap: "break-word" }}>
+                            <p>{eve.description  || "No Description is Available"}</p>
+                        </div>
+                        
 
                         <h5 style={{fontWeight:"bold"}}>Additional Information</h5>
                         <p><strong>Dress Code:</strong>{eve.dresscode}</p>
